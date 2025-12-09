@@ -1,43 +1,40 @@
-На втором сервере (GitLab-Runner):
-#### Установка Docker:
+# Настройка GitLab Runner-сервера
 
-`sudo apt update sudo apt install -y docker.io sudo systemctl enable --now docker sudo usermod -aG docker $USER newgrp docker`
+Документ описывает, как подготовить сервер `GitLab-Runner` с Docker и зарегистрировать раннер в GitLab-проекте.
 
-#### Установка GitLab Runner:
+## 1. Установка Docker
 
-`curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh | sudo bash sudo apt install -y gitlab-runner`
+```bash
+sudo apt update
+sudo apt install -y docker.io
+sudo systemctl enable --now docker
+sudo usermod -aG docker $USER
+newgrp docker
+```
 
----
+## 2. Установка GitLab Runner
 
-### Регистрация раннера
+```bash
+curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh | sudo bash
+sudo apt install -y gitlab-runner
+```
 
-На GitLab-Runner:
-`sudo gitlab-runner register`
+## 3. Регистрация раннера
 
-Ответы на вопросы:
+Запустите регистрацию и ответьте на вопросы:
 
-- **URL:** `http://192.168.0.50`
-    
-- **Token:** (брал в GitLab → Project → Settings → CI/CD → Runners)
-    
-- **Описание:** `flask-runner-local`
-    
-- **Executor:** `docker`
-    
-- **Docker image:** `python:3.12`
-    
+```bash
+sudo gitlab-runner register
+```
 
----
+- **URL**: `http://192.168.0.50`
+- **Token**: токен проекта из **Settings → CI/CD → Runners**
+- **Описание**: `flask-runner-local` (или любое удобное имя)
+- **Executor**: `docker`
+- **Docker image**: `python:3.12`
 
-### Проверка раннера
+Проверьте, что раннер активен:
 
-`sudo gitlab-runner list`
-
-Убедился, что раннер активен и готов к работе.
-
----
-
-### Обзор CI/CD pipeline!!!
-
-Текущий `.github/workflows` не будет работать, так как это формат GitHub Actions.  
-В GitLab CI/CD используется `.gitlab-ci.yml`, который нужно создать.
+```bash
+sudo gitlab-runner list
+```

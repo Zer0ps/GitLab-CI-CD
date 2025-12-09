@@ -1,32 +1,36 @@
-### Первый вход в GitLab через веб-интерфейс
+# Настройка GitLab CE
 
-- Перешёл в браузере по адресу:  
-    `http://192.168.0.50`
-    
-- Установил новый пароль для пользователя `root`.
-    
+Инструкция для первого входа в веб-интерфейс GitLab, сброса пароля root и импорта существующего проекта.
 
----
+## Первый вход
 
-### Сброс пароля `root` (если нужно было вручную)
+1. Откройте в браузере `http://192.168.0.50`.
+2. Задайте новый пароль для пользователя `root` и войдите под ним.
 
-bash
+## Сброс пароля root через консоль (если нужно)
 
-КопироватьРедактировать
+```bash
+sudo gitlab-rails console
+user = User.find_by_username("root")
+user.password = "NewStrongPassword"
+user.password_confirmation = "NewStrongPassword"
+user.save!
+user.confirm
+```
 
-`sudo gitlab-rails console user = User.find_by_username("root") user.password = "Zahar123" user.password_confirmation = "Zahar123" user.save! user.confirm`
-
----
-
-### Импорт существующего проекта из GitHub
+## Импорт существующего проекта из GitHub
 
 На сервере с GitLab CE:
 
-`git clone https://github.com/zaharchik372/flask-ci-demo.git cd flask-ci-demo`
+```bash
+git clone https://github.com/zaharchik372/flask-ci-demo.git
+cd flask-ci-demo
+git remote remove origin
+```
 
-Создал новый пустой проект в GitLab по адресу:  
-`http://192.168.0.50/root/flask-ci-demo`
+Создайте пустой проект в GitLab по адресу `http://192.168.0.50/root/flask-ci-demo`, затем привяжите репозиторий к новому origin и отправьте код:
 
-Добавил remote:
-
-`git remote remove origin git remote add origin http://192.168.0.50/root/flask-ci-demo.git git push -u origin main`
+```bash
+git remote add origin http://192.168.0.50/root/flask-ci-demo.git
+git push -u origin main
+```
